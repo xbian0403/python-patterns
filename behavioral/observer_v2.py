@@ -136,12 +136,11 @@ class DecimalViewer:
         print(u'DecimalViewer: Subject %s has data %d' % (subject.name, subject.data))
 
 
-# Example usage...
 def main():
     import doctest
     count, _ = doctest.testmod()
     if count == 0:
-        print('*** ALL TESTS PASS ***\nGive someone a HIGH FIVE!')
+        print('*** ALL TESTS PASS ***\nHIGH FIVE!')
 
 if __name__ == '__main__':
     main()
