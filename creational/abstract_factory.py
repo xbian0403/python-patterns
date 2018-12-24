@@ -33,6 +33,75 @@ http://ginstrom.com/scribbles/2007/10/08/design-patterns-python-style/
 Provides a way to encapsulate a group of individual factories.
 """
 
+class MazeFactory(object):
+    """docstring for MazeFactory"""
+    def __init__(self, arg):
+        super(MazeFactory, self).__init__()
+        self.arg = arg
+    def makeWall(self,):
+        pass
+    def makeRoom(self,):
+        pass
+    def makeDoor(self,):
+
+
+class BombMazeFactory(MazeFactory):
+    """docstring for BombMazeFactory"""
+    def __init__(self, arg):
+        super(BombMazeFactory, self).__init__()
+        self.arg = arg
+    def makeRoom():
+        return BombRoom()
+        
+class EnhancedMazeFactory(MazeFactory):
+    """docstring for EnhancedMazeFactory"""
+    def __init__(self, arg):
+        super(EnhancedMazeFactory, self).__init__()
+        self.arg = arg
+    def makeDoor(self):
+        return EnhancedFancyDoor
+
+class Wall:
+    pass
+class Room:
+    pass
+class Door:
+    pass
+
+class BombRoom(Room):
+    pass
+class EnhancedFancyDoor(Door):
+    pass
+
+'''
+Or
+'''
+
+class MazeFactory(object):
+    """docstring for MazeFactory"""
+    def __init__(self, type_):
+        super(MazeFactory, self).__init__()
+        self.tpye = type_
+        self.dict = {
+            'BombMazeFactory': {
+                'wall': Wall,
+                'room': BombRoom,
+                'door': Door
+            },
+            'EnhancedMazeFactory': {
+                'wall': Wall,
+                'room': Room,
+                'door': EnhancedFancyDoor            }
+        }
+
+    def makeWall(self,):
+        return self.dict[self.type]['wall']()
+    def makeRoom(self,):
+        pass
+    def makeDoor(self,):
+
+        
+
 import random
 
 

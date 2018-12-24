@@ -52,7 +52,9 @@ class EnglishGetter(object):
     def get(self, msgid):
         return str(msgid)
 
-
+#parameterized Application
+#store the class to be created as a variable of Application
+#create Language Getter Object
 def get_localizer(language="English"):
     """The factory method"""
     languages = dict(English=EnglishGetter, Greek=GreekGetter)
