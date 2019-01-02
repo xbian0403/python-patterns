@@ -74,10 +74,19 @@ class EnhancedFancyDoor(Door):
     pass
 
 '''
-Or
+Or parameterized Factory type + store classes inside
 '''
 
-class MazeFactory(object):
+class Singleton(type):
+    """docstring for Singleton"""
+    _instances={}
+    def __call__(cls, , *args, **kwargs):
+        if not cls in _instances:
+            _instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return _instances[cls]
+
+        
+class MazeFactory(object,metaclass=Singleton):
     """docstring for MazeFactory"""
     def __init__(self, type_):
         super(MazeFactory, self).__init__()
@@ -93,6 +102,12 @@ class MazeFactory(object):
                 'room': Room,
                 'door': EnhancedFancyDoor            }
         }
+
+    #support flexible new kinds of products.
+    #eg makeDoor, makeWall, makeRoom. Even in the furture makeDesk
+    #dont' have to add new functions to support
+    def make(self, item):
+        return self.dict[self.type][item]()
 
     def makeWall(self,):
         return self.dict[self.type]['wall']()
