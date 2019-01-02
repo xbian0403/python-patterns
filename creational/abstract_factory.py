@@ -43,6 +43,7 @@ class MazeFactory(object):
     def makeRoom(self,):
         pass
     def makeDoor(self,):
+        pass
 
 
 class BombMazeFactory(MazeFactory):
@@ -62,16 +63,21 @@ class EnhancedMazeFactory(MazeFactory):
         return EnhancedFancyDoor
 
 class Wall:
-    pass
+    def __init__(self, *args, **kwargs):
+        print('this is Wall')
 class Room:
-    pass
+    def __init__(self, *args, **kwargs):
+        print('this is Room')
 class Door:
-    pass
+    def __init__(self, *args, **kwargs):
+        print('this is Door')
 
 class BombRoom(Room):
-    pass
+    def __init__(self, *args, **kwargs):
+        print('this is BombRoom')
 class EnhancedFancyDoor(Door):
-    pass
+    def __init__(self, *args, **kwargs):
+        print('this is EnhancedFancyDoor')
 
 '''
 Or parameterized Factory type + store classes inside
@@ -80,17 +86,18 @@ Or parameterized Factory type + store classes inside
 class Singleton(type):
     """docstring for Singleton"""
     _instances={}
-    def __call__(cls, , *args, **kwargs):
-        if not cls in _instances:
-            _instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return _instances[cls]
+    def __call__(cls, *args, **kwargs):
+        if not cls in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
         
-class MazeFactory(object,metaclass=Singleton):
+class MazeFactory(object, metaclass=Singleton):
     """docstring for MazeFactory"""
     def __init__(self, type_):
+        print('init MazeFactory')
         super(MazeFactory, self).__init__()
-        self.tpye = type_
+        self.type = type_
         self.dict = {
             'BombMazeFactory': {
                 'wall': Wall,
@@ -109,71 +116,81 @@ class MazeFactory(object,metaclass=Singleton):
     def make(self, item):
         return self.dict[self.type][item]()
 
-    def makeWall(self,):
+    def makeWall(self):
         return self.dict[self.type]['wall']()
-    def makeRoom(self,):
+    def makeRoom(self):
         pass
-    def makeDoor(self,):
+    def makeDoor(self):
+        pass
 
-        
-
-import random
-
-
-class PetShop(object):
-
-    """A pet shop"""
-
-    def __init__(self, animal_factory=None):
-        """pet_factory is our abstract factory.  We can set it at will."""
-
-        self.pet_factory = animal_factory
-
-    def show_pet(self):
-        """Creates and shows a pet using the abstract factory"""
-
-        pet = self.pet_factory()
-        print("We have a lovely {}".format(pet))
-        print("It says {}".format(pet.speak()))
-
-
-class Dog(object):
-    def speak(self):
-        return "woof"
-
-    def __str__(self):
-        return "Dog"
-
-
-class Cat(object):
-    def speak(self):
-        return "meow"
-
-    def __str__(self):
-        return "Cat"
-
-
-# Additional factories:
-
-# Create a random animal
-def random_animal():
-    """Let's be dynamic!"""
-    return random.choice([Dog, Cat])()
-
-
-# Show pets with various factories
 if __name__ == "__main__":
+    bFactory = MazeFactory('BombMazeFactory')
+    bFactory.make('wall')
+    bFactory.make('room')
+    bFactory.make('door')
 
-    # A Shop that sells only cats
-    cat_shop = PetShop(Cat)
-    cat_shop.show_pet()
-    print("")
+    #doesn't support other factory after initialization. It's a singleton!
+    factory = MazeFactory('EnhancedMazeFactory')
+    bFactory.make('wall')
+    bFactory.make('room')
+    bFactory.make('door')
+# import random
 
-    # A shop that sells random animals
-    shop = PetShop(random_animal)
-    for i in range(3):
-        shop.show_pet()
-        print("=" * 20)
+
+# class PetShop(object):
+
+#     """A pet shop"""
+
+#     def __init__(self, animal_factory=None):
+#         """pet_factory is our abstract factory.  We can set it at will."""
+
+#         self.pet_factory = animal_factory
+
+#     def show_pet(self):
+#         """Creates and shows a pet using the abstract factory"""
+
+#         pet = self.pet_factory()
+#         print("We have a lovely {}".format(pet))
+#         print("It says {}".format(pet.speak()))
+
+
+# class Dog(object):
+#     def speak(self):
+#         return "woof"
+
+#     def __str__(self):
+#         return "Dog"
+
+
+# class Cat(object):
+#     def speak(self):
+#         return "meow"
+
+#     def __str__(self):
+#         return "Cat"
+
+
+# # Additional factories:
+
+# # Create a random animal
+# def random_animal():
+#     """Let's be dynamic!"""
+#     return random.choice([Dog, Cat])()
+
+
+# # Show pets with various factories
+# if __name__ == "__main__":
+
+#     # A Shop that sells only cats
+#     cat_shop = PetShop(Cat)
+#     cat_shop.show_pet()
+#     print("")
+
+#     # A shop that sells random animals
+#     shop = PetShop(random_animal)
+#     for i in range(3):
+#         shop.show_pet()
+#         print("=" * 20)
 
 ### OUTPUT ###
 # We have a lovely Cat
